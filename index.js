@@ -2,7 +2,6 @@
 import "./style.css";
 import * as day1 from "./days/day1.js";
 
-console.log(mydata);
 // Write Javascript code!
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
