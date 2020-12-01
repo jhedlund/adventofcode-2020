@@ -10,12 +10,16 @@ let sampleInput = [1721, 979, 366, 299, 675, 1456];
 
 day1.expenseReport(sampleInput);
 
+let day1array = [];
+
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
   if (xhr.readyState == 4) {
     console.log(xhr.status);
-    console.log(xhr.responseURL);
-    console.log(xhr.responseText);
+    //console.log(xhr.responseURL);
+    //console.log(xhr.responseText);
+    day1array = xhr.responseText.split("\n");
+    day1.expenseReport(day1array);
   }
 };
 
