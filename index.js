@@ -20,8 +20,11 @@ xhr.onreadystatechange = function() {
     //console.log(xhr.responseText);
     day1array = xhr.responseText.split("\n");
     day1.expenseReport(day1array, 982464);
+    day1.expenseReport(day1array, 162292410, 3);
   }
 };
+
+day1.expenseReport(sampleInput, 241861950, 3);
 
 xhr.open(
   "GET",
