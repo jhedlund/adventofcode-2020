@@ -25,8 +25,8 @@ xhr.onreadystatechange = function() {
 
 xhr.open(
   "GET",
-  "./assets/day1.txt",
-  //"https://raw.githubusercontent.com/jhedlund/adventofcode-2020/master/inputs/day1.txt",
+  //"./assets/day1.txt",
+  "https://raw.githubusercontent.com/jhedlund/adventofcode-2020/master/assets/day1.txt",
   true
 );
 xhr.send();

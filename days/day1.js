@@ -9,7 +9,6 @@ export function expenseReport(inputArray, expectedResult) {
       if (xindex != yindex && xindex > yindex) {
         if (Number(x) + Number(y) == 2020) {
           //console.log("Found at (" + xindex + ", " + yindex + ")");
-
           answer = Number(x) * Number(y);
         }
       }
