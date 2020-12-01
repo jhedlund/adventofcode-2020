@@ -10,11 +10,18 @@ let sampleInput = [1721, 979, 366, 299, 675, 1456];
 
 day1.expenseReport(sampleInput);
 
-let reader = new FileReader();
-let inputtext = "";
-
-reader.onload = function(e) {
-  console.log(e.target.result);
+let xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4) {
+    console.log(xhr.status);
+    console.log(xhr.responseURL);
+    console.log(xhr.responseText);
+  }
 };
 
-//reader.readAsText("./inputs/day1.txt");
+xhr.open(
+  "GET",
+  "https://raw.githubusercontent.com/jhedlund/adventofcode-2020/master/inputs/day1.txt",
+  true
+);
+xhr.send();
