@@ -28,8 +28,9 @@ day1.expenseReport(sampleInput, 241861950, 3);
 
 xhr.open(
   "GET",
-  //"./assets/day1.txt",
-  "https://raw.githubusercontent.com/jhedlund/adventofcode-2020/master/assets/day1.txt",
+  /* have to use github, stackblitz not serving static files (I tried in assets) */
+
+  "https://raw.githubusercontent.com/jhedlund/adventofcode-2020/master/inputs/day1.txt",
   true
 );
 xhr.send();
