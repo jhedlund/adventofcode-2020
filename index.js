@@ -41,6 +41,8 @@ sampleInput = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"];
 
 day2.checkPasswordPolicy(sampleInput, 2);
 
+day2.checkPasswordPolicy(sampleInput, 1, "position");
+
 let day2xhr = new XMLHttpRequest();
 day2xhr.onreadystatechange = function() {
   if (day2xhr.readyState == 4) {
@@ -50,6 +52,7 @@ day2xhr.onreadystatechange = function() {
 
     let day2array = day2xhr.responseText.split("\n");
     day2.checkPasswordPolicy(day2array, 418);
+    day2.checkPasswordPolicy(day2array, 616, "position");
   }
 };
 day2xhr.open(
