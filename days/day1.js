@@ -1,6 +1,9 @@
-// 8:20am
-
-// expense report
+/*
+ * Day 1
+ *
+ * Expense Report
+ *
+ */
 
 export function expenseReport(inputArray, expectedResult, depth = 2) {
   let answer = sumArray([], 0, inputArray, depth);
