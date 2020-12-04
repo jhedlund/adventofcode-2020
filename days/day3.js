@@ -25,8 +25,8 @@ export default class Day3 extends Day {
           ".#..#...#.#"
         ]
       ],
-      [[7], []],
-      [214]
+      [[7], [336]],
+      [214, 8336352024]
     );
   }
 
@@ -34,9 +34,16 @@ export default class Day3 extends Day {
     return this.countTrees(inputArray);
   }
 
-  countTrees(inputArray) {
-    let move = [3, 1]; // right 3, down 1
+  star2(inputArray) {
+    let answer = this.countTrees(inputArray, [1, 1])[0];
+    answer = answer * this.countTrees(inputArray, [3, 1])[0];
+    answer = answer * this.countTrees(inputArray, [5, 1])[0];
+    answer = answer * this.countTrees(inputArray, [7, 1])[0];
+    answer = answer * this.countTrees(inputArray, [1, 2])[0];
+    return [answer, ""];
+  }
 
+  countTrees(inputArray, move = [3, 1]) {
     let location_x = 0;
 
     let open_count = 0;
