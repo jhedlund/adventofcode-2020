@@ -8,6 +8,13 @@ h2 {
   margin-right: auto;
 }
 
+tr th {
+  background-color: white;
+}
+
+tr {
+  background-color: lightgray;
+}
 tr.success {
   background-color: lightgreen;
 }

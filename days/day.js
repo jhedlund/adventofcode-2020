@@ -3,7 +3,7 @@
  *
  */
 
-import dayResults from "../lib/dayResults";
+import * as dr from "../lib/dayResults";
 
 const github_url = "https://raw.githubusercontent.com/";
 const github_user = "jhedlund";
@@ -17,7 +17,7 @@ export default class Day {
     this.samples = sampleInputs;
     this.sampleResults = sampleResults;
     this.starResults = starResults;
-    this.results = new dayResults(this.day);
+    this.results = new dr.dayResults(this.day);
   }
 
   run(callback) {
@@ -38,13 +38,16 @@ export default class Day {
 
     // readystate:  0 = open not called, 1 = opened, 2= headers received
     // 3 = loading, 4 = done
+
+    let star = 1;
+
     if (self.dayInputXHR.readyState == 4) {
       //self.result(self.run_star1sample(), self.star1SampleResult);
 
       self.dayArray = self.dayInputXHR.responseText.split("\n");
 
       self.samples.forEach(function(sample, ix, arr) {
-        self.runStar("1", ix + 1, 1, sample, self.sampleResults[0][ix]);
+        self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
       });
 
       if (self.dayInputXHR.status == 200) {
@@ -55,17 +58,19 @@ export default class Day {
         if (self.starResults !== undefined && self.starResults.length > 1)
           star2expected = self.starResults[1];
 
-        this.runStar("1", 0, 1, self.dayArray, star1expected);
+        this.runStar(star, 0, 1, self.dayArray, star1expected);
+
+        star++;
 
         self.samples.forEach(function(sample, ix, arr) {
           let expected = -1;
           if (self.sampleResults[1] != undefined) {
             expected = self.sampleResults[1][ix];
           }
-          self.runStar("2", ix + 1, 2, sample, expected);
+          self.runStar(star, ix + 1, 2, sample, expected);
         });
 
-        this.runStar("2", 0, 2, self.dayArray, star2expected);
+        this.runStar(star, 0, 2, self.dayArray, star2expected);
       } else {
         console.log(
           "Day " +
@@ -73,6 +78,7 @@ export default class Day {
             " INVALID DATA, response status code " +
             self.dayInputXHR.status
         );
+        self.results.addResult(0, star, dr.StatusEnum.missinginputdata, 0, 0);
       }
       self.cb();
     } else if (self.dayInputXHR.readyState == 0) {
@@ -88,29 +94,44 @@ export default class Day {
     }
     console.log(message);
     let starfn = this["star" + star];
-    let success = false;
+    let status = dr.StatusEnum.failure;
     if (typeof starfn === "function") {
-      let actual = this["star" + star](input);
+      let result = this["star" + star](input);
+      let actual = result[0];
+      let extradata = result[1];
       if (expected == undefined) expected = -1;
       let prefix = "Day " + this.day + " ";
       if (sampleNum > 0) {
         prefix += "Sample " + sampleNum + " ";
       }
       prefix += "star " + starNum + " ";
-      let status = "FAILURE (expected " + expected + "): ";
+      let statusstr = "FAILURE (expected " + expected + "): ";
       if (actual == expected) {
-        status = "SUCCESS: ";
-        success = true;
+        statusstr = "SUCCESS: ";
+        status = dr.StatusEnum.success;
       }
       if (actual == undefined) {
         actual = " -- undefined";
-        //status = "";
+        status = dr.StatusEnum.missingresult;
       }
-      console.log(status + prefix + ": " + actual);
-      this.results.addResult(sampleNum, star, success, actual, expected);
+      console.log(statusstr + prefix + ": " + actual);
+      this.results.addResult(
+        sampleNum,
+        star,
+        status,
+        actual,
+        expected,
+        extradata
+      );
     } else {
       console.log("Day" + this.day + ".star" + star + "() NOT IMPLEMENTED");
-      this.results.addResult(sampleNum, star, false, undefined, expected);
+      this.results.addResult(
+        sampleNum,
+        star,
+        dr.StatusEnum.notimplemented,
+        undefined,
+        expected
+      );
     }
   }
 

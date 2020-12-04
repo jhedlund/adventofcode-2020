@@ -61,6 +61,6 @@ export default class Day2 extends Day {
         }
       }
     });
-    return valid_passwords;
+    return [valid_passwords, undefined];
   }
 }

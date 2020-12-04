@@ -29,6 +29,7 @@ export default class Day1 extends Day {
 
   sumArray(startValues, startIx, inputArray, depth) {
     let answer = -1;
+    let extradata = "";
     let self = this;
     inputArray.forEach(function(val, ix, arr) {
       if (ix >= startIx) {
@@ -44,9 +45,9 @@ export default class Day1 extends Day {
                 return a * b;
               }) * Number(val);
 
-            console.log("Values:", startValues.concat(Number(val)));
+            extradata = "Values: " + startValues.concat(Number(val));
 
-            return answer;
+            return [answer, extradata];
           }
         } else {
           // depth > 1
@@ -57,10 +58,13 @@ export default class Day1 extends Day {
             inputArray,
             depth - 1
           );
-          if (tmp != -1) answer = tmp;
+          if (tmp[0] != -1) {
+            answer = tmp[0];
+            extradata = tmp[1];
+          }
         }
       }
     });
-    return answer;
+    return [answer, extradata];
   }
 }

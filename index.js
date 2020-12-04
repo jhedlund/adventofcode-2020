@@ -2,13 +2,14 @@
 import "./style.css";
 import Day1 from "./days/day1.js";
 import Day2 from "./days/day2.js";
+import Day3 from "./days/day3.js";
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
 
 let dayix = 1;
 
-let days = [new Day1(), new Day2()];
+let days = [new Day1(), new Day2(), new Day3()];
 
 function runDays() {
   if (dayix <= days.length) {
@@ -22,23 +23,31 @@ function runDays() {
 function done() {
   let tbl = "<table id='resulttab'>";
   tbl += "<tr>";
-  tbl += "<th>Day</th><th>Star</th><th></th><th>Result</th>";
+  tbl += "<th>Day</th><th>Star</th><th></th><th>Result</th><th>Extra Data</th>";
   tbl += "</tr>";
   days.forEach(function(day) {
     day.results.results.forEach(function(result) {
-      tbl += "<tr class=' " + (result.success ? "success" : "fail") + "'>";
+      tbl += "<tr class=' " + result.status + "'>";
       tbl += "<td>" + day.day + "</td>";
       tbl += "<td>" + result.star + "</td>";
       tbl +=
         "<td>" +
         (result.sampleNumber ? "Sample " + result.sampleNumber : "") +
         "</td>";
-      tbl +=
-        "<td>" +
-        (result.success
-          ? result.answer
-          : result.answer + " != " + result.expected) +
-        "</td>";
+      tbl += "<td>";
+
+      switch (result.status) {
+        case "success":
+          tbl += result.answer;
+          break;
+        case "failure":
+          tbl += result.answer + " != " + result.expected;
+          break;
+        default:
+          tbl += result.status;
+      }
+      tbl += "</td>";
+      tbl += "<td>" + (result.extradata ? result.extradata : "") + "</td>";
       tbl += "</tr>";
     });
   });
