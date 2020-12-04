@@ -9,7 +9,7 @@ appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
 
 let dayix = 1;
 
-let days = [new Day1(), new Day2(), new Day3()];
+let days = [new Day3(), new Day2(), new Day1()];
 
 function runDays() {
   if (dayix <= days.length) {
@@ -34,7 +34,7 @@ function done() {
         "<td>" +
         (result.sampleNumber ? "Sample " + result.sampleNumber : "") +
         "</td>";
-      tbl += "<td>";
+      tbl += "<td class='result'>";
 
       switch (result.status) {
         case "success":
@@ -47,7 +47,10 @@ function done() {
           tbl += result.status;
       }
       tbl += "</td>";
-      tbl += "<td>" + (result.extradata ? result.extradata : "") + "</td>";
+      tbl +=
+        "<td class='xtra'>" +
+        (result.extradata ? result.extradata : "") +
+        "</td>";
       tbl += "</tr>";
     });
   });

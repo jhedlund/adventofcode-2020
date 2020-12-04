@@ -46,6 +46,10 @@ export default class Day {
 
       self.dayArray = self.dayInputXHR.responseText.split("\n");
 
+      for (let i = 0; i < self.dayArray.length; i++) {
+        self.dayArray[i] = self.dayArray[i].replace(/(\r\n|\n|\r)/gm, "");
+      }
+
       self.samples.forEach(function(sample, ix, arr) {
         self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
       });

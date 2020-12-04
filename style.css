@@ -21,3 +21,12 @@ tr.success {
 tr.fail {
   background-color: lightcoral;
 }
+
+td.result {
+  text-align: right;
+}
+
+td.xtra {
+  padding-left: 10px;
+  padding-right: 10px;
+}
