@@ -8,13 +8,12 @@
 import Day from "./day.js";
 
 export default class Day1 extends Day {
-  constructor(callback) {
+  constructor() {
     super(
       1,
       [[1721, 979, 366, 299, 675, 1456]],
       [[514579], [241861950]],
-      [982464, 162292410],
-      callback
+      [982464, 162292410]
     );
   }
   star1(inputArray) {

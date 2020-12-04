@@ -1,3 +1,16 @@
-h1, h2 {
+h1,
+h2 {
   font-family: Lato;
+}
+
+#resulttab {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+tr.success {
+  background-color: lightgreen;
+}
+tr.fail {
+  background-color: lightcoral;
 }

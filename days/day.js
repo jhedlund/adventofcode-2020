@@ -3,6 +3,8 @@
  *
  */
 
+import dayResults from "../lib/dayResults";
+
 const github_url = "https://raw.githubusercontent.com/";
 const github_user = "jhedlund";
 const github_repo = "adventofcode-2020";
@@ -10,12 +12,12 @@ const github_branch = "master";
 const github_path = "/inputs/";
 
 export default class Day {
-  constructor(daynumber, sampleInputs, sampleResults, starResults, callback) {
+  constructor(daynumber, sampleInputs, sampleResults, starResults) {
     this.day = daynumber;
     this.samples = sampleInputs;
     this.sampleResults = sampleResults;
     this.starResults = starResults;
-    this.callback = callback;
+    this.results = new dayResults(this.day);
   }
 
   run(callback) {
@@ -86,6 +88,7 @@ export default class Day {
     }
     console.log(message);
     let starfn = this["star" + star];
+    let success = false;
     if (typeof starfn === "function") {
       let actual = this["star" + star](input);
       if (expected == undefined) expected = -1;
@@ -97,14 +100,17 @@ export default class Day {
       let status = "FAILURE (expected " + expected + "): ";
       if (actual == expected) {
         status = "SUCCESS: ";
+        success = true;
       }
       if (actual == undefined) {
         actual = " -- undefined";
         //status = "";
       }
       console.log(status + prefix + ": " + actual);
+      this.results.addResult(sampleNum, star, success, actual, expected);
     } else {
       console.log("Day" + this.day + ".star" + star + "() NOT IMPLEMENTED");
+      this.results.addResult(sampleNum, star, false, undefined, expected);
     }
   }
 

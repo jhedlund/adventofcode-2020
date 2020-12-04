@@ -7,13 +7,12 @@
 import Day from "./day.js";
 
 export default class Day2 extends Day {
-  constructor(callback) {
+  constructor() {
     super(
       2,
       [["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]],
       [[2], [1]],
-      [418, 616],
-      callback
+      [418, 616]
     );
   }
 
