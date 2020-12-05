@@ -27,8 +27,8 @@ export default class Day4 extends Day {
           "iyr:2011 ecl:brn hgt:59in"
         ]
       ],
-      [[2], []],
-      [,]
+      [[2], [2]],
+      [196, 114]
     );
   }
 
@@ -36,7 +36,11 @@ export default class Day4 extends Day {
     return this.validPassports(inputArray, ["cid"]);
   }
 
-  validPassports(inputArray, ignoreFields = []) {
+  star2(inputArray) {
+    return this.validPassports(inputArray, ["cid"], true);
+  }
+
+  validPassports(inputArray, ignoreFields = [], validateData = false) {
     let fields = [];
 
     let countvalid = 0;
@@ -48,7 +52,7 @@ export default class Day4 extends Day {
       if (line == "") {
         totalPassports++;
         // complete passport, check it and reset
-        if (self.checkPassport(fields, ignoreFields)) {
+        if (self.checkPassport(fields, ignoreFields, validateData)) {
           countvalid++;
         }
         fields = [];
@@ -60,14 +64,14 @@ export default class Day4 extends Day {
       }
     });
     // one more passport to check:
-    if (this.checkPassport(fields, ignoreFields)) {
+    if (this.checkPassport(fields, ignoreFields, validateData)) {
       countvalid++;
     }
 
     return [countvalid, "totalPassports: " + totalPassports];
   }
 
-  checkPassport(fields, ignoreFields) {
+  checkPassport(fields, ignoreFields, validateData) {
     let requiredFields = [
       "byr",
       "iyr",
@@ -79,16 +83,92 @@ export default class Day4 extends Day {
       "cid"
     ];
     let searchFields = requiredFields;
+    let validData = true;
     fields = fields.concat(ignoreFields);
     fields.forEach(function(field) {
       searchFields.forEach(function(sought, ix) {
-        if (sought == field.split(":")[0]) {
+        let f = field.split(":");
+        if (sought == f[0]) {
           searchFields.splice(ix, 1);
+          if (validateData && validData) {
+            switch (f[0]) {
+              case "byr":
+                if (Number(f[1]) < 1920 || Number(f[1]) > 2002) {
+                  validData = false;
+                }
+                break;
+              case "iyr":
+                if (Number(f[1]) < 2010 || Number(f[1]) > 2020) {
+                  validData = false;
+                }
+                break;
+              case "eyr":
+                if (Number(f[1]) < 2020 || Number(f[1]) > 2030) {
+                  validData = false;
+                }
+                break;
+              case "hgt":
+                let hgt = f[1].replace(f[1].slice(-2), "");
+                if (f[1].slice(-2) == "cm") {
+                  if (hgt < 150 || hgt > 193) {
+                    validData = false;
+                  }
+                } else if (f[1].slice(-2) == "in") {
+                  if (hgt < 59 || hgt > 76) {
+                    validData = false;
+                  }
+                } else {
+                  validData = false;
+                }
+                break;
+              case "hcl":
+                let colora = f[1].replace("#", "").match(/[0-9a-f]/g);
+                let color = "";
+                if (colora) {
+                  color = colora.join("");
+                }
+                if (
+                  "#" + color != f[1] ||
+                  f[1].length != 7 ||
+                  f[1].charAt(0) != "#"
+                ) {
+                  //console.log("COLOR", color, f[1]);
+                  validData = false;
+                }
+                break;
+              case "ecl":
+                if (
+                  !(
+                    f[1] == "amb" ||
+                    f[1] == "blu" ||
+                    f[1] == "brn" ||
+                    f[1] == "gry" ||
+                    f[1] == "grn" ||
+                    f[1] == "hzl" ||
+                    f[1] == "oth"
+                  )
+                ) {
+                  //console.log("BAD ECL: ", f[1]);
+                  validData = false;
+                }
+                break;
+              case "pid":
+                let pida = f[1].match(/[0-9]/g);
+                let pid = "";
+                if (pida) {
+                  pid = pida.join("");
+                }
+                if (pid != f[1] || f[1].length != 9) {
+                  validData = false;
+                }
+                break;
+            }
+          }
         }
       });
     });
     if (searchFields.length == 0) {
-      return true;
+      return true && validData;
     }
     return false;
   }
