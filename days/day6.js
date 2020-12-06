@@ -29,8 +29,8 @@ export default class Day6 extends Day {
           "b"
         ]
       ],
-      [[11], []],
-      [,]
+      [[11], [6]],
+      [6885, 3550]
     );
   }
 
@@ -40,19 +40,44 @@ export default class Day6 extends Day {
     return [answer, ""];
   }
 
-  groupCounts(input) {
+  star2(input) {
+    let answer = this.groupCounts(input, "union");
+
+    return [answer, ""];
+  }
+
+  groupCounts(input, fn = "all") {
     let group = [];
     let sum = 0;
     let self = this;
+    let newgroup = true;
     input.forEach(function(person) {
       if (person == "") {
         sum += self.uniqueCount(group);
-        if (input.length < 50) {
+        /* if (input.length < 50) {
           console.log(group.sort(), self.uniqueCount(group));
-        }
+        }*/
         group = [];
+        newgroup = true;
       } else {
-        group = group.concat(person.split(""));
+        if (fn == "union") {
+          if (group.length == 0 && newgroup) {
+            group = person.split("");
+            newgroup = false;
+          } else {
+            let found = [];
+            group.forEach(function(groupanswer) {
+              person.split("").forEach(function(yesanswer) {
+                if (groupanswer == yesanswer) {
+                  found.push(groupanswer);
+                }
+              });
+            });
+            group = found;
+          }
+        } else {
+          group = group.concat(person.split(""));
+        }
       }
     });
     sum += self.uniqueCount(group);
