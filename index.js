@@ -5,13 +5,21 @@ import Day2 from "./days/day2.js";
 import Day3 from "./days/day3.js";
 import Day4 from "./days/day4.js";
 import Day5 from "./days/day5.js";
+import Day6 from "./days/day6.js";
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
 
 let dayix = 1;
 
-let days = [new Day5(), new Day4(), new Day3(), new Day2(), new Day1()];
+let days = [
+  new Day6(),
+  new Day5(),
+  new Day4(),
+  new Day3(),
+  new Day2(),
+  new Day1()
+];
 
 function runDays() {
   if (dayix <= days.length) {
