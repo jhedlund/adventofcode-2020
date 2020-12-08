@@ -23,13 +23,40 @@ export default class Day8 extends Day {
           "acc +6"
         ]
       ],
-      [[5], []],
-      [,]
+      [[5], [8]],
+      [1766, 1639]
     );
   }
 
   star1(input) {
     return this.accumulator(input);
+  }
+
+  star2(input) {
+    let results = [];
+
+    for (let ix = 0; ix < input.length; ix++) {
+      let instr = input[ix].split(" ");
+      if (instr[0] !== "acc") {
+        if (instr[0] == "nop") {
+          instr[0] = "jmp";
+        } else {
+          instr[0] = "nop";
+        }
+        let saveinstr = input[ix];
+        input[ix] = instr.join(" ");
+
+        results = this.accumulator(input);
+
+        if (results[1].finished) {
+          break;
+        }
+
+        input[ix] = saveinstr;
+      }
+    }
+
+    return results;
   }
 
   accumulator(input) {
@@ -45,10 +72,11 @@ export default class Day8 extends Day {
 
     ix = 0;
     let next_ix = 0;
-    let error = undefined;
+    let extra = Object();
+
     while (true) {
       if (!instructions.has(ix)) {
-        error = "unknown instructions, bug?  Tried index '" + ix + "'";
+        extra.error = "unknown instructions, bug?  Tried index '" + ix + "'";
         break;
       }
 
@@ -81,7 +109,11 @@ export default class Day8 extends Day {
       } else {
         break;
       }
+      if (ix >= instructions.size) {
+        extra.finished = true;
+        break;
+      }
     }
-    return [accum, error];
+    return [accum, extra];
   }
 }

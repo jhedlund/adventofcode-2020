@@ -68,7 +68,11 @@ function done() {
         "&nbsp;ms</td>";
       tbl +=
         "<td class='xtra'>" +
-        (result.extradata ? result.extradata : "") +
+        (result.extradata
+          ? typeof result.extradata == "object"
+            ? JSON.stringify(result.extradata)
+            : result.extradata
+          : "") +
         "</td>";
       tbl += "</tr>";
     });
