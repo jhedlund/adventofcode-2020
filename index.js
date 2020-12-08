@@ -7,6 +7,7 @@ import Day4 from "./days/day4.js";
 import Day5 from "./days/day5.js";
 import Day6 from "./days/day6.js";
 import Day7 from "./days/day7.js";
+import Day8 from "./days/day8.js";
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
@@ -20,7 +21,8 @@ let days = [
   new Day4(),
   new Day5(),
   new Day6(),
-  new Day7()
+  new Day7(),
+  new Day8()
 ];
 
 function runDays() {
@@ -61,7 +63,9 @@ function done() {
       }
       tbl += "</td>";
       tbl +=
-        "<td class='performance'>" + result.timems.toFixed(3) + "&nbsp;ms</td>";
+        "<td class='performance'>" +
+        (result.timems ? result.timems.toFixed(3) : "") +
+        "&nbsp;ms</td>";
       tbl +=
         "<td class='xtra'>" +
         (result.extradata ? result.extradata : "") +
