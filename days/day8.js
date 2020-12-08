@@ -5,6 +5,7 @@
  */
 
 import Day from "./day.js";
+import handheld from "../lib/handheld.js";
 
 export default class Day8 extends Day {
   constructor() {
@@ -26,14 +27,16 @@ export default class Day8 extends Day {
       [[5], [8]],
       [1766, 1639]
     );
+    this.handheld = new handheld();
   }
 
   star1(input) {
-    return this.accumulator(input);
+    let result = this.handheld.runInstructions(input);
+    return [result.accumulator, result.error];
   }
 
   star2(input) {
-    let results = [];
+    let result = undefined;
 
     for (let ix = 0; ix < input.length; ix++) {
       let instr = input[ix].split(" ");
@@ -46,9 +49,9 @@ export default class Day8 extends Day {
         let saveinstr = input[ix];
         input[ix] = instr.join(" ");
 
-        results = this.accumulator(input);
+        result = this.handheld.runInstructions(input);
 
-        if (results[1].finished) {
+        if (result.finished) {
           break;
         }
 
@@ -56,64 +59,6 @@ export default class Day8 extends Day {
       }
     }
 
-    return results;
-  }
-
-  accumulator(input) {
-    let accum = 0;
-    let instructions = new Map();
-    let ix = 0;
-    input.forEach(function(instr) {
-      let store = instr.split(" ");
-      store.push(0);
-      instructions.set(ix, store);
-      ix++;
-    });
-
-    ix = 0;
-    let next_ix = 0;
-    let extra = Object();
-
-    while (true) {
-      if (!instructions.has(ix)) {
-        extra.error = "unknown instructions, bug?  Tried index '" + ix + "'";
-        break;
-      }
-
-      let instr = instructions.get(ix);
-
-      if (instr[2] == 0) {
-        instr[2] += 1;
-
-        let oper = instr[0];
-
-        let value = Number(instr[1].substring(1));
-
-        if (instr[1].indexOf("-") == 0) {
-          value = -1 * value;
-        }
-        next_ix = ix + 1;
-
-        switch (oper) {
-          case "acc":
-            accum += value;
-            break;
-          case "jmp":
-            next_ix = ix + value;
-            break;
-          case "nop":
-            // nothing
-            break;
-        }
-        ix = next_ix;
-      } else {
-        break;
-      }
-      if (ix >= instructions.size) {
-        extra.finished = true;
-        break;
-      }
-    }
-    return [accum, extra];
+    return [result.accumulator, result.error];
   }
 }
