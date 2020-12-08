@@ -45,7 +45,7 @@ function done() {
       tbl += "<td>" + result.star + "</td>";
       tbl +=
         "<td>" +
-        (result.sampleNumber ? "Sample " + result.sampleNumber : "") +
+        (result.sampleNumber ? "Sample&nbsp;" + result.sampleNumber : "") +
         "</td>";
       tbl += "<td class='result'>";
 
