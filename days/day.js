@@ -82,7 +82,14 @@ export default class Day {
             " INVALID DATA, response status code " +
             self.dayInputXHR.status
         );
-        self.results.addResult(0, star, dr.StatusEnum.missinginputdata, 0, 0);
+        self.results.addResult(
+          0,
+          star,
+          dr.StatusEnum.missinginputdata,
+          0,
+          0,
+          0
+        );
       }
       self.cb();
     } else if (self.dayInputXHR.readyState == 0) {
@@ -93,6 +100,7 @@ export default class Day {
 
   runStar(star, sampleNum, starNum, input, expected) {
     let message = "Running Day" + this.day + ".star" + star + "()";
+    let t0 = performance.now();
     if (sampleNum > 0) {
       message += " sample " + sampleNum;
     }
@@ -119,22 +127,27 @@ export default class Day {
         status = dr.StatusEnum.missingresult;
       }
       console.log(statusstr + prefix + ": " + actual);
+      let t1 = performance.now();
       this.results.addResult(
         sampleNum,
         star,
         status,
         actual,
         expected,
-        extradata
+        extradata,
+        t1 - t0
       );
     } else {
       console.log("Day" + this.day + ".star" + star + "() NOT IMPLEMENTED");
+      let t1 = performance.now();
       this.results.addResult(
         sampleNum,
         star,
         dr.StatusEnum.notimplemented,
         undefined,
-        expected
+        expected,
+        "",
+        t1 - t0
       );
     }
   }

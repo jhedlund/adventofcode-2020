@@ -22,7 +22,7 @@ tr.fail {
   background-color: lightcoral;
 }
 
-td.result {
+td.result, td.performance {
   text-align: right;
 }
 

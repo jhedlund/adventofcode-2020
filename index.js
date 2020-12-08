@@ -35,7 +35,8 @@ function runDays() {
 function done() {
   let tbl = "<table id='resulttab'>";
   tbl += "<tr>";
-  tbl += "<th>Day</th><th>Star</th><th></th><th>Result</th><th>Extra Data</th>";
+  tbl +=
+    "<th>Day</th><th>Star</th><th></th><th>Result</th><th>Perf</th><th>Extra Data</th>";
   tbl += "</tr>";
   days.reverse().forEach(function(day) {
     day.results.results.forEach(function(result) {
@@ -59,6 +60,8 @@ function done() {
           tbl += result.status;
       }
       tbl += "</td>";
+      tbl +=
+        "<td class='performance'>" + result.timems.toFixed(3) + "&nbsp;ms</td>";
       tbl +=
         "<td class='xtra'>" +
         (result.extradata ? result.extradata : "") +
