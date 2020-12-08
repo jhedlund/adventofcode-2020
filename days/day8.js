@@ -36,29 +36,7 @@ export default class Day8 extends Day {
   }
 
   star2(input) {
-    let result = undefined;
-
-    for (let ix = 0; ix < input.length; ix++) {
-      let instr = input[ix].split(" ");
-      if (instr[0] !== "acc") {
-        if (instr[0] == "nop") {
-          instr[0] = "jmp";
-        } else {
-          instr[0] = "nop";
-        }
-        let saveinstr = input[ix];
-        input[ix] = instr.join(" ");
-
-        result = this.handheld.runInstructions(input);
-
-        if (result.finished) {
-          break;
-        }
-
-        input[ix] = saveinstr;
-      }
-    }
-
+    let result = this.handheld.fixInstructions(input);
     return [result.accumulator, result.error];
   }
 }
