@@ -35,7 +35,7 @@ export default class Day9 extends Day {
           576
         ]
       ],
-      [[127], []],
+      [[127], [62]],
       [1721308972]
     );
   }
@@ -47,6 +47,44 @@ export default class Day9 extends Day {
       return this.validateNumbers(input, 25, 25);
     }
   }
+  // 186493970 is too low
+  // 186897546 is too low
+  star2(input) {
+    let illegal = this.star1(input);
+
+    let contiguous = [];
+    let smallest = 0;
+    let largest = 0;
+    input.forEach(function(number, ix) {
+      number = Number(number);
+      if (contiguous.length == 0) {
+        let cursum = number;
+        smallest = number;
+        largest = number;
+        contiguous = [number];
+        for (let i = ix + 1; i < input.length; i++) {
+          let nextnum = Number(input[i]);
+          cursum += nextnum;
+          contiguous.push(nextnum);
+          if (nextnum < smallest) {
+            smallest = nextnum;
+          }
+          if (nextnum > largest) {
+            largest = nextnum;
+          }
+          if (cursum < illegal[0]) {
+            //
+          } else if (cursum > illegal[0]) {
+            contiguous = [];
+            break;
+          } else {
+            break;
+          }
+        }
+      }
+    });
+    return [largest + smallest, largest + ", " + smallest];
+  }
 
   validateNumbers(input, preamble = 25, window = 25) {
     let current = [];
@@ -54,7 +92,7 @@ export default class Day9 extends Day {
     let self = this;
     input.forEach(function(value, ix) {
       if (illegal.length == 0) {
-        if (current.length == window) {
+        if (current.length == window && ix >= preamble) {
           if (input.length < 50) {
             //console.log(current, value);
           }
