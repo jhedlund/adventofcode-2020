@@ -68,38 +68,38 @@ export default class Day10 extends Day {
 
     let current_joltage = 0;
 
-    let voltages = [current_joltage];
+    let joltages = [current_joltage];
     let curIx = 0;
 
     let error = "";
     while (current_joltage < highest_joltage) {
-      let voltCount = voltages.length;
+      let joltCount = joltages.length;
       for (let i = curIx; i < sorted.length; i++) {
         if (
           sorted[i] == current_joltage + 1 ||
           sorted[i] == current_joltage + 3
         ) {
           current_joltage = sorted[i];
-          voltages.push(sorted[i]);
+          joltages.push(sorted[i]);
           curIx = i + 1;
           break;
         }
       }
-      if (voltages.length - voltCount == 0) {
+      if (joltages.length - joltCount == 0) {
         error = "missing voltage";
         break;
       }
     }
     if (error.length == 0) {
-      voltages.push(voltages[voltages.length - 1] + 3);
+      joltages.push(joltages[joltages.length - 1] + 3);
     }
 
     let diffCount1 = 0;
     let diffCount3 = 0;
 
-    voltages.forEach(function(voltage, ix) {
+    joltages.forEach(function(voltage, ix) {
       if (ix > 0) {
-        if (voltages[ix - 1] == voltage - 1) {
+        if (joltages[ix - 1] == voltage - 1) {
           diffCount1++;
         } else {
           diffCount3++;
@@ -107,7 +107,7 @@ export default class Day10 extends Day {
       }
     });
     console.log(diffCount1, diffCount3);
-    console.log(voltages);
+    console.log(joltages);
 
     return [diffCount1 * diffCount3, error];
   }
