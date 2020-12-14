@@ -106,27 +106,32 @@ export default class Day {
     }
     console.log(message);
     let starfn = this["star" + star];
-    let status = dr.StatusEnum.failure;
+    let status = dr.StatusEnum.wrongresulttype;
+    let actual = undefined;
+    let extradata = undefined;
     if (typeof starfn === "function") {
       let result = this["star" + star](input);
-      let actual = result[0];
-      let extradata = result[1];
-      if (expected == undefined) expected = -1;
-      let prefix = "Day " + this.day + " ";
-      if (sampleNum > 0) {
-        prefix += "Sample " + sampleNum + " ";
+      if (result !== undefined && result.length > 1) {
+        status = dr.StatusEnum.failure;
+        actual = result[0];
+        extradata = result[1];
+        if (expected == undefined) expected = -1;
+        let prefix = "Day " + this.day + " ";
+        if (sampleNum > 0) {
+          prefix += "Sample " + sampleNum + " ";
+        }
+        prefix += "star " + starNum + " ";
+        let statusstr = "FAILURE (expected " + expected + "): ";
+        if (actual == expected) {
+          statusstr = "SUCCESS: ";
+          status = dr.StatusEnum.success;
+        }
+        if (actual == undefined) {
+          actual = " -- undefined";
+          status = dr.StatusEnum.missingresult;
+        }
+        console.log(statusstr + prefix + ": " + actual);
       }
-      prefix += "star " + starNum + " ";
-      let statusstr = "FAILURE (expected " + expected + "): ";
-      if (actual == expected) {
-        statusstr = "SUCCESS: ";
-        status = dr.StatusEnum.success;
-      }
-      if (actual == undefined) {
-        actual = " -- undefined";
-        status = dr.StatusEnum.missingresult;
-      }
-      console.log(statusstr + prefix + ": " + actual);
       let t1 = performance.now();
       this.results.addResult(
         sampleNum,
