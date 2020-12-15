@@ -117,7 +117,7 @@ export default class Day14 extends Day {
             }
           }
           memory.set(parseInt(newvalue, 2), newvalue); */
-        /}
+        //}
       }
     });
     let sum = 0;
