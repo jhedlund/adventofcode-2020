@@ -21,11 +21,11 @@ export default class Day14 extends Day {
           "mask = 000000000000000000000000000000X1001X",
           "mem[42] = 100",
           "mask = 00000000000000000000000000000000X0XX",
-          "mem[26] = 1]"
+          "mem[26] = 1"
         ]
       ],
       [[165, 50], [, 208]],
-      [13105044880745]
+      [13105044880745, 3505392154485]
     );
   }
 
@@ -72,10 +72,6 @@ export default class Day14 extends Day {
 
     let memory = new Map();
 
-    if (input.length > 5) {
-      return;
-    }
-
     input.forEach(function(line) {
       if (line.indexOf("mask") == 0) {
         let parts = line.split(" = ");
@@ -86,6 +82,10 @@ export default class Day14 extends Day {
         memaddress = Number(memaddress.slice(0, -1));
 
         let binary = memaddress.toString(2).padStart(36, "0");
+
+        let storage = Number(parts[1])
+          .toString(2)
+          .padStart(36, "0");
 
         let value = "";
 
@@ -101,13 +101,16 @@ export default class Day14 extends Day {
             value += mask.charAt(i);
           }
         }
-        console.log("here", Math.pow(2, floatcount));
-        /*for (let i = 0; i < Math.pow(2, floatcount); i++) {
+
+        if (floatcount > 10) {
+          return [0, "floatcount is " + floatcount];
+        }
+
+        for (let i = 0; i < Math.pow(2, floatcount); i++) {
           let newvalue = "";
           let binaryIx = 0;
-          let floatbinary = i.toString(2);
-          console.log(floatbinary); */
-          /*
+          let floatbinary = i.toString(2).padStart(floatcount, "0");
+
           for (let c = 0; c < value.length; c++) {
             if (value.charAt(c) == "X") {
               newvalue += floatbinary.charAt(binaryIx);
@@ -116,8 +119,8 @@ export default class Day14 extends Day {
               newvalue += value.charAt(c);
             }
           }
-          memory.set(parseInt(newvalue, 2), newvalue); */
-        //}
+          memory.set(parseInt(newvalue, 2), storage);
+        }
       }
     });
     let sum = 0;
