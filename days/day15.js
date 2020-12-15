@@ -45,7 +45,7 @@ export default class Day15 extends Day {
         numMap.set(spoken, 1);
         previousSpoken.set(spoken, [i + 1]);
       }
-      console.log(i + 1, spoken);
+      //console.log(i + 1, spoken);
     }
 
     return [spoken, ""];
