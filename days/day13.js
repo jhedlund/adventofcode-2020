@@ -22,6 +22,7 @@ export default class Day13 extends Day {
     let maxTime = 1;
     let maxBus = 0;
     let minBus = 0;
+
     busses.forEach(function(busID, busIx) {
       if (busID != "x") {
         busRules.push([Number(busID), busIx]);
@@ -35,32 +36,68 @@ export default class Day13 extends Day {
       }
     });
 
-    /*busRules.sort(
+    busRules.sort(
       (function(index) {
         return function(a, b) {
           return a[index] === b[index] ? 0 : a[index] < b[index] ? 1 : -1;
         };
       })(0)
-    );*/
+    );
+
+    if (busRules.length > 6) {
+      return;
+    }
 
     let found_t = 0;
     let iterations = 0;
     let timestamp = busRules[0][0];
 
-    let cur_mult = busRules[0][0];
+    let cur_mult = maxBus;
     let next_ix = 1;
     let n = 1;
-
+    if (busRules.length > 6) {
+      //n = 2395816212;
+      n = 190186626518;
+    }
+    let current_t = 0;
     while (true) {
       iterations++;
 
-      let matches = 0;
-      let x = 1;
+      current_t = cur_mult * n;
 
-      /*while (cur_mult * n + busRules[next_ix][1] < x * busRules[next_ix][0]) {
-        x++;
+      //let seeking = largestBusID - (largestBusMinutes - busRules[busIx][1]);
+      let seeking = current_t - (busRules[0][1] - busRules[next_ix][1]);
+
+      if (seeking % busRules[next_ix][0] == 0) {
+        /*if (current_t < 10000 && busRules.length < 6) {
+          console.log(
+            "MATCH! on ",
+            current_t,
+            busRules[next_ix][0],
+            x * busRules[next_ix][0],
+            "n=",
+            n,
+            "x=",
+            x
+          );
+        }*/
+        next_ix++;
+        if (next_ix >= busRules.length) {
+          found_t = current_t - busRules[0][1];
+          break;
+        }
+      } else {
+        /*if (next_ix > 1) {
+          console.log(
+            "missed out, seeking ",
+            current_t,
+            "but went over with ",
+            x * busRules[next_ix][0]
+          );
+        }*/
+        n++;
+        next_ix = 1;
       }
-      n++; */
       /*   for (let busIx = 0; busIx < busRules.length; busIx++) {
         if (timestamp >= 1068780 && timestamp <= 1068789) {
           console.log(
@@ -77,22 +114,32 @@ export default class Day13 extends Day {
         }
       }
 */
-      if (iterations > 1 || matches == busRules.length) {
-        if (matches == busRules.length) {
-          found_t = timestamp;
-        }
-        console.log("stopped at ", timestamp);
+      if (iterations > 100000000000) {
         break;
       }
       timestamp += minBus;
     }
-
+    console.log("stopped at ", current_t, "n =", n);
     //130000013
     //1300000013
     //1301300000
     //13001300000
     //13013000000
     //13130000000
+    //12982381815
+    //7317223810
+    //73172220508
+    //146344441749
+    //219516661524
+    //292688882765
+    //1024411081981
+    //1756133282663
+    //6885855482612
+    //8351855484811
+    //37671855482612
+    //44257355278488
+    //66234577275046
+    //139406797236961
     //100000000000000
 
     /*
