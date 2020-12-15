@@ -60,7 +60,7 @@ export default class Day13 extends Day {
       /*while (cur_mult * n + busRules[next_ix][1] < x * busRules[next_ix][0]) {
         x++;
       }
-      n++; 
+      n++; */
       /*   for (let busIx = 0; busIx < busRules.length; busIx++) {
         if (timestamp >= 1068780 && timestamp <= 1068789) {
           console.log(
