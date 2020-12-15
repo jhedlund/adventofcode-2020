@@ -8,10 +8,24 @@ import Day from "./day.js";
 
 export default class Day15 extends Day {
   constructor() {
-    super(15, [["0,3,6"], ["1,3,2"]], [[436, 1], []], []);
+    super(
+      15,
+      [["0,3,6"], ["1,3,2"]],
+      [[436, 1], [175594, 2578]],
+      [441, 10613991]
+    );
   }
 
   star1(input) {
+    return this.lastSpoken(input, 2020);
+  }
+
+  star2(input) {
+    // 30000000 for length = 3 is tkaing 24-25 seconds
+    //return this.lastSpoken(input, 30000000);
+  }
+
+  lastSpoken(input, nth) {
     let numbers = input[0].split(",");
 
     let numMap = new Map();
@@ -21,7 +35,7 @@ export default class Day15 extends Day {
     });
 
     let spoken = 0;
-    for (let i = 0; i < 2020; i++) {
+    for (let i = 0; i < nth; i++) {
       if (i < numbers.length) {
         spoken = numbers[i];
       } else {
