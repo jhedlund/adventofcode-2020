@@ -57,10 +57,10 @@ export default class Day13 extends Day {
       let matches = 0;
       let x = 1;
 
-      while (cur_mult * n + busRules[next_ix][1] < x * busRules[next_ix][0]) {
+      /*while (cur_mult * n + busRules[next_ix][1] < x * busRules[next_ix][0]) {
         x++;
       }
-      n++;
+      n++; 
       /*   for (let busIx = 0; busIx < busRules.length; busIx++) {
         if (timestamp >= 1068780 && timestamp <= 1068789) {
           console.log(
@@ -77,7 +77,7 @@ export default class Day13 extends Day {
         }
       }
 */
-      if (iterations > 100000 || matches == busRules.length) {
+      if (iterations > 1 || matches == busRules.length) {
         if (matches == busRules.length) {
           found_t = timestamp;
         }
