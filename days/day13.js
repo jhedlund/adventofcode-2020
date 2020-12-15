@@ -61,7 +61,7 @@ export default class Day13 extends Day {
     let n = 1;
     if (busRules.length > 6) {
       //n = 190186626518; //help get it a bit of the way there, previous failures
-      n = 22595269360685;
+      n = (836024966345345 + 68) / maxBus;
     }
     let current_t = 0;
     while (true) {

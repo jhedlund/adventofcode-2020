@@ -21,7 +21,7 @@ export default class Day15 extends Day {
   }
 
   star2(input) {
-    // 30000000 for length = 3 is tkaing 24-25 seconds
+    // 30000000 for length = 3 is taking 24-25 seconds
     //return this.lastSpoken(input, 30000000);
   }
 
