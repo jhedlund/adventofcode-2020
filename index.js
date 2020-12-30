@@ -16,6 +16,7 @@ import Day13 from "./days/day13.js";
 import Day14 from "./days/day14.js";
 import Day15 from "./days/day15.js";
 import Day16 from "./days/day16.js";
+import Day17 from "./days/day17.js";
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
@@ -38,7 +39,8 @@ let days = [
   new Day13(),
   new Day14(),
   new Day15(),
-  new Day16()
+  new Day16(),
+  new Day17()
 ];
 
 function runDays() {
