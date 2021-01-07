@@ -10,114 +10,153 @@ const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 export default class Day17 extends Day {
   constructor() {
-    super(17, [[".#.", "..#", "###"]], [[112], []], [,]);
+    super(17, [[".#.", "..#", "###"]], [[112], [848]], [317]);
   }
 
   star1(input) {
-    if (input.length < 4) {
-      return this.cycleCubes(input);
-    }
+    return this.cycleCubes(input);
   }
 
   star2(input) {
-    //return this.equalizeSeats(input, 5, true);
+    if (input.length < 5) {
+      return this.cycleCubes(input, 6, true, true);
+    }
   }
 
-  cycleCubes(input, activeRule = [2, 3], inactiveRule = [3], cycles = 6) {
+  cycleCubes(input, cycles = 6, increaseW = false, debug = false) {
     //let layoutsEqual = false;
     //let rounds = 0;
-    let prevInput = [input];
+    let prevInput = [[[...input]]];
+
     let newInput = [];
     //while (!layoutsEqual && rounds < 900) {
     for (let cycle = 0; cycle < cycles; cycle++) {
-      newInput = this.cycle(prevInput, activeRule, inactiveRule);
+      newInput = this.cycle(prevInput, increaseW);
       //layoutsEqual = equals(newInput, prevInput);
       prevInput = newInput;
-      console.log(cycle, newInput);
+      if (debug && cycle < 2) {
+        console.log(cycle, newInput);
+      }
     }
     //}
 
     return [this.countCubes(newInput, "#"), ""];
   }
 
-  cycle(input, activeRule, inactiveRule) {
+  cycle(input, increaseW) {
     let result = [];
     let self = this;
-    let firstSlice = input[0];
-    let newblank = [];
+    let newblankslice = [];
+    let newblankw1 = [];
+    let newblankw2 = [];
     let blankRow = "";
-    firstSlice.forEach(function(row) {
-      if (blankRow.length == 0) {
-        blankRow = ".".repeat(row.length);
-      }
-      newblank.push(blankRow);
-    });
-    input.splice(0, 0, newblank);
-    input.push(newblank);
-    if (input.length > 3) {
-      blankRow = "." + blankRow + ".";
-    }
-    input.forEach(function(slice, sliceIx) {
-      let newSlice = [];
-      if (input.length > 3) {
-        slice.forEach(function(row) {
-          row = "." + row + ".";
-        });
-        slice.splice(0, 0, blankRow);
-        slice.push(blankRow);
-      }
-      slice.forEach(function(row, rowIx) {
-        let newRow = "";
 
-        for (let colIx = 0; colIx < row.length; colIx++) {
-          if (
-            row.charAt(colIx) == "." &&
-            self.countAdjacent(input, rowIx, colIx, sliceIx, "#") == 3
-          ) {
-            newRow += "#";
-          } else if (
-            row.charAt(colIx) == "#" &&
-            (self.countAdjacent(input, rowIx, colIx, sliceIx, "#") < 2 ||
-              self.countAdjacent(input, rowIx, colIx, sliceIx, "#") > 3)
-          ) {
-            newRow += ".";
-          } else {
-            newRow += row.charAt(colIx);
+    for (let w = 0; w < input.length; w++) {
+      for (let sliceIx = 0; sliceIx < input[w].length; sliceIx++) {
+        for (let rowIx = 0; rowIx < input[w][sliceIx].length; rowIx++) {
+          if (blankRow.length == 0) {
+            blankRow = ".".repeat(input[w][sliceIx][rowIx].length + 2);
           }
+          if (sliceIx == 0) {
+            newblankslice.push(blankRow);
+          }
+          input[w][sliceIx][rowIx] = "." + input[w][sliceIx][rowIx] + ".";
         }
-        newSlice.push(newRow);
+        input[0][sliceIx].push(blankRow);
+        input[0][sliceIx].splice(0, 0, blankRow);
+
+        if (sliceIx == 0) {
+          newblankslice.push(blankRow);
+          newblankslice.push(blankRow);
+        }
+      }
+      if (w == 0) {
+        for (let sliceIx = 0; sliceIx < input[w].length; sliceIx++) {
+          newblankw1.push([...newblankslice]);
+          newblankw2.push([...newblankslice]);
+        }
+      }
+    }
+
+    if (increaseW) {
+      input.splice(0, 0, newblankw1);
+      input.push(newblankw2);
+      /*      let sliceLen = input[0].length;
+      let rowLen = input[0][0].length;
+      let blankW1 = [];
+      let blankW2 = [];
+
+      for (let slice = 0; slice < sliceLen; slice++) {
+        blankW1.push(newblank);
+        blankW2.push(newblank);
+      }
+      input.splice(0, 0, blankW1);
+      input.push(blankW2); */
+    }
+
+    for (let w = 0; w < input.length; w++) {
+      input[w].splice(0, 0, [...newblankslice]);
+      input[w].push([...newblankslice]);
+
+      let newW = [];
+
+      input[w].forEach(function(slice, sliceIx) {
+        let newSlice = [];
+
+        /*slice.splice(0, 0, blankRow);
+      slice.push(blankRow);
+      for (let rowIx = 0; rowIx < slice.length; rowIx++) {
+        slice[rowIx] = "." + slice[rowIx] + ".";
+      }*/
+        //console.log("pre", sliceIx, slice);
+        slice.forEach(function(row, rowIx) {
+          let newRow = "";
+
+          for (let colIx = 0; colIx < row.length; colIx++) {
+            if (
+              row.charAt(colIx) == "." &&
+              self.countAdjacent(input, rowIx, colIx, sliceIx, w, "#") == 3
+            ) {
+              newRow += "#";
+            } else if (
+              row.charAt(colIx) == "#" &&
+              (self.countAdjacent(input, rowIx, colIx, sliceIx, w, "#") < 2 ||
+                self.countAdjacent(input, rowIx, colIx, sliceIx, w, "#") > 3)
+            ) {
+              newRow += ".";
+            } else {
+              newRow += row.charAt(colIx);
+            }
+          }
+          newSlice.push(newRow);
+        });
+        newW.push(newSlice);
       });
-      result.push(newSlice);
-    });
+      result.push(newW);
+    }
     return result;
   }
   countCubes(input, cubeState) {
     let result = 0;
-    input.forEach(function(slice) {
-      slice.forEach(function(row) {
-        for (let col = 0; col < row.length; col++) {
-          if (row.charAt(col) == cubeState) {
-            result++;
+    input.forEach(function(w) {
+      w.forEach(function(slice) {
+        slice.forEach(function(row) {
+          for (let col = 0; col < row.length; col++) {
+            if (row.charAt(col) == cubeState) {
+              result++;
+            }
           }
-        }
+        });
       });
     });
     return result;
   }
 
-  countState(
-    direction,
-    input,
-    row,
-    col,
-    z,
-    zoffset,
-    seatState,
-    recurse = false
-  ) {
+  countState(direction, input, row, col, z, zoffset, w, woffset, seatState) {
     let testcol = col;
     let testrow = row;
     let testz = z + zoffset;
+    let testw = w + woffset;
     switch (direction) {
       case "nw":
         testcol = col - 1;
@@ -154,123 +193,126 @@ export default class Day17 extends Day {
       testcol >= 0 &&
       testrow >= 0 &&
       testz >= 0 &&
-      testz < input.length &&
-      testrow < input[testz].length &&
-      testcol < input[testz][testrow].length
+      testw >= 0 &&
+      testw < input.length &&
+      testz < input[testw].length &&
+      testrow < input[testw][testz].length &&
+      testcol < input[testw][testz][testrow].length
     ) {
-      let seat = input[testz][testrow].charAt(testcol);
+      let seat = input[testw][testz][testrow].charAt(testcol);
       if (seat == seatState) {
         return 1;
-      } else if (recurse && seat == ".") {
-        return this.countState(
-          direction,
-          input,
-          testrow,
-          testcol,
-          seatState,
-          recurse
-        );
       }
     }
     return 0;
   }
 
-  countAdjacent(input, row, col, z, seatState, recurse = false) {
+  countAdjacent(input, row, col, z, w, seatState) {
     let result = 0;
 
-    // top left
-    for (let zoffset = -1; zoffset < 2; zoffset++) {
-      result += this.countState(
-        "nw",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "n",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "ne",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "e",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "se",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "s",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "sw",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      result += this.countState(
-        "w",
-        input,
-        row,
-        col,
-        z,
-        zoffset,
-        seatState,
-        recurse
-      );
-      if (zoffset != 0) {
+    for (let woffset = -1; woffset < 2; woffset++) {
+      for (let zoffset = -1; zoffset < 2; zoffset++) {
         result += this.countState(
-          "b",
+          "nw",
           input,
           row,
           col,
           z,
           zoffset,
-          seatState,
-          recurse
+          w,
+          woffset,
+          seatState
         );
+        result += this.countState(
+          "n",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "ne",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "e",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "se",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "s",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "sw",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        result += this.countState(
+          "w",
+          input,
+          row,
+          col,
+          z,
+          zoffset,
+          w,
+          woffset,
+          seatState
+        );
+        if (!(zoffset == 0 && woffset == 0)) {
+          result += this.countState(
+            "b",
+            input,
+            row,
+            col,
+            z,
+            zoffset,
+            w,
+            woffset,
+            seatState
+          );
+        }
       }
     }
 
