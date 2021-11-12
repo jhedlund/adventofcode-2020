@@ -5,6 +5,7 @@
 
 import * as dr from "../lib/dayResults.js";
 
+const use_github = false; // if false, just use local uri (needed github for stackblitz)
 const github_url = "https://raw.githubusercontent.com/";
 const github_user = "jhedlund";
 const github_repo = "adventofcode-2020";
@@ -23,12 +24,17 @@ export default class Day {
   run(callback) {
     let self = this;
     this.cb = callback;
-    //console.log(this.github_input_uri());
     this.dayInputXHR = new XMLHttpRequest();
     this.dayInputXHR.onreadystatechange = function() {
       self.inputLoaded(self);
     };
-    this.dayInputXHR.open("GET", this.github_input_uri(), true);
+    let fileurl = "";
+    if(use_github) {
+      fileurl = this.github_input_uri()
+    } else {
+      fileurl = "./inputs/day" + this.day + ".txt";
+    }
+    this.dayInputXHR.open("GET", fileurl, true);
     this.dayInputXHR.send();
   }
 
@@ -39,42 +45,13 @@ export default class Day {
     // readystate:  0 = open not called, 1 = opened, 2= headers received
     // 3 = loading, 4 = done
 
-    let star = 1;
-
     if (self.dayInputXHR.readyState == 4) {
       //self.result(self.run_star1sample(), self.star1SampleResult);
 
       self.dayArray = self.dayInputXHR.responseText.split("\n");
 
-      for (let i = 0; i < self.dayArray.length; i++) {
-        self.dayArray[i] = self.dayArray[i].replace(/(\r\n|\n|\r)/gm, "");
-      }
-
-      self.samples.forEach(function(sample, ix, arr) {
-        self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
-      });
-
       if (self.dayInputXHR.status == 200) {
-        let star1expected = -1;
-        let star2expected = -1;
-        if (self.starResults !== undefined && self.starResults.length > 0)
-          star1expected = self.starResults[0];
-        if (self.starResults !== undefined && self.starResults.length > 1)
-          star2expected = self.starResults[1];
-
-        this.runStar(star, 0, 1, self.dayArray, star1expected);
-
-        star++;
-
-        self.samples.forEach(function(sample, ix, arr) {
-          let expected = -1;
-          if (self.sampleResults[1] != undefined) {
-            expected = self.sampleResults[1][ix];
-          }
-          self.runStar(star, ix + 1, 2, sample, expected);
-        });
-
-        this.runStar(star, 0, 2, self.dayArray, star2expected);
+        self.runAll(self);
       } else {
         console.log(
           "Day " +
@@ -96,6 +73,38 @@ export default class Day {
       console.log("Day " + self.day + " NOT SENT");
       self.cb();
     }
+  }
+
+  runAll(self) {
+    let star = 1;
+    for (let i = 0; i < self.dayArray.length; i++) {
+      self.dayArray[i] = self.dayArray[i].replace(/(\r\n|\n|\r)/gm, "");
+    }
+
+    self.samples.forEach(function(sample, ix, arr) {
+      self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
+    });
+
+    let star1expected = -1;
+    let star2expected = -1;
+    if (self.starResults !== undefined && self.starResults.length > 0)
+      star1expected = self.starResults[0];
+    if (self.starResults !== undefined && self.starResults.length > 1)
+      star2expected = self.starResults[1];
+
+    this.runStar(star, 0, 1, self.dayArray, star1expected);
+
+    star++;
+
+    self.samples.forEach(function(sample, ix, arr) {
+      let expected = -1;
+      if (self.sampleResults[1] != undefined) {
+        expected = self.sampleResults[1][ix];
+      }
+      self.runStar(star, ix + 1, 2, sample, expected);
+    });
+
+    this.runStar(star, 0, 2, self.dayArray, star2expected);
   }
 
   runStar(star, sampleNum, starNum, input, expected) {
@@ -155,6 +164,10 @@ export default class Day {
         t1 - t0
       );
     }
+  }
+
+  writeLog(log) {
+    document.getElementById("runner").innerHTML += log + "<br/>";
   }
 
   github_input_uri() {

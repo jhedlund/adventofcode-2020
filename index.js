@@ -19,6 +19,8 @@ import Day17 from "./days/day17.js";
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
 
+let t0 = performance.now();
+
 let dayix = 1;
 
 let days = [
@@ -44,14 +46,21 @@ let days = [
 function runDays() {
   if (dayix <= days.length) {
     dayix++;
+    appendOutput("Running day " + days[dayix-2].day);
     days[dayix - 2].run(runDays);
   } else {
     done();
   }
 }
 
+function appendOutput(log) {
+  document.getElementById("runner").innerHTML += log + "<br/>";
+}
+
 function done() {
-  let tbl = "<table id='resulttab'>";
+  let t1 = performance.now();
+  let total_timems = t1-t0;
+  let tbl = "Total time: " + total_timems.toFixed(3) + "ms<br/><br/><table id='resulttab'>";
   tbl += "<tr>";
   tbl +=
     "<th>Day</th><th>Star</th><th></th><th>Result</th><th>Perf</th><th>Extra Data</th>";

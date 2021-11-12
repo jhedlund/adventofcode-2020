@@ -19,7 +19,7 @@ export default class Day17 extends Day {
 
   star2(input) {
     if (input.length < 5) {
-      return this.cycleCubes(input, 6, true, true);
+      //return this.cycleCubes(input, 6, true, true);
     }
   }
 
