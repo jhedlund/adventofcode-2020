@@ -80,34 +80,38 @@ export default class Day {
     for (let i = 0; i < self.dayArray.length; i++) {
       self.dayArray[i] = self.dayArray[i].replace(/(\r\n|\n|\r)/gm, "");
     }
+    
+    if(self.samples.every(function(sample, ix, arr) {
+        let result = self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
+        return result;
+      })) {
 
-    self.samples.forEach(function(sample, ix, arr) {
-      self.runStar(star, ix + 1, 1, sample, self.sampleResults[0][ix]);
-    });
+      let star1expected = -1;
+      let star2expected = -1;
+      if (self.starResults !== undefined && self.starResults.length > 0)
+        star1expected = self.starResults[0];
+      if (self.starResults !== undefined && self.starResults.length > 1)
+        star2expected = self.starResults[1];
 
-    let star1expected = -1;
-    let star2expected = -1;
-    if (self.starResults !== undefined && self.starResults.length > 0)
-      star1expected = self.starResults[0];
-    if (self.starResults !== undefined && self.starResults.length > 1)
-      star2expected = self.starResults[1];
+      if (this.runStar(star, 0, 1, self.dayArray, star1expected)) {
 
-    this.runStar(star, 0, 1, self.dayArray, star1expected);
+        star++;
 
-    star++;
-
-    self.samples.forEach(function(sample, ix, arr) {
-      let expected = -1;
-      if (self.sampleResults[1] != undefined) {
-        expected = self.sampleResults[1][ix];
+        if(self.samples.every(function(sample, ix, arr) {
+          let expected = -1;
+          if (self.sampleResults[1] != undefined) {
+            expected = self.sampleResults[1][ix];
+          }
+          return self.runStar(star, ix + 1, 2, sample, expected);
+        })) {
+          this.runStar(star, 0, 2, self.dayArray, star2expected);
+        }
       }
-      self.runStar(star, ix + 1, 2, sample, expected);
-    });
-
-    this.runStar(star, 0, 2, self.dayArray, star2expected);
+    }
   }
 
   runStar(star, sampleNum, starNum, input, expected) {
+    let retval = false;
     let message = "Running Day" + this.day + ".star" + star + "()";
     let t0 = performance.now();
     if (sampleNum > 0) {
@@ -134,6 +138,7 @@ export default class Day {
         if (actual == expected) {
           statusstr = "SUCCESS: ";
           status = dr.StatusEnum.success;
+          retval = true;
         }
         if (actual == undefined) {
           actual = " -- undefined";
@@ -164,10 +169,16 @@ export default class Day {
         t1 - t0
       );
     }
+    return retval;
   }
 
-  writeLog(log) {
-    document.getElementById("runner").innerHTML += log + "<br/>";
+  writeDebug(log) {
+    let date = new Date();
+    let timestamp = date.getHours() + ":" + 
+                    date.getMinutes().toString().padStart(2, "0") + ":" + 
+                    date.getSeconds().toString().padStart(2,"0") + "." +
+                    date.getMilliseconds().toFixed(3).toString().padStart(3, "0");
+    document.getElementById("debugout").innerHTML += "[Day " + this.day + " Debug " + timestamp + "] " + log + "<br/>";
   }
 
   github_input_uri() {

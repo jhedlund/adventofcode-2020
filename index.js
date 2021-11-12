@@ -60,7 +60,7 @@ function appendOutput(log) {
 function done() {
   let t1 = performance.now();
   let total_timems = t1-t0;
-  let tbl = "Total time: " + total_timems.toFixed(3) + "ms<br/><br/><table id='resulttab'>";
+  let tbl = "<br /><center>Total time: " + total_timems.toFixed(3) + "ms</center><br/><table id='resulttab'>";
   tbl += "<tr>";
   tbl +=
     "<th>Day</th><th>Star</th><th></th><th>Result</th><th>Perf</th><th>Extra Data</th>";
