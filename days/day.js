@@ -3,7 +3,7 @@
  *
  */
 
-import * as dr from "../lib/dayResults";
+import * as dr from "../lib/dayResults.js";
 
 const github_url = "https://raw.githubusercontent.com/";
 const github_user = "jhedlund";

@@ -1,5 +1,3 @@
-// Import stylesheets
-import "./style.css";
 import Day1 from "./days/day1.js";
 import Day2 from "./days/day2.js";
 import Day3 from "./days/day3.js";
