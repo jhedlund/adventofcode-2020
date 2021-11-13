@@ -177,7 +177,7 @@ export default class Day {
     let timestamp = date.getHours() + ":" + 
                     date.getMinutes().toString().padStart(2, "0") + ":" + 
                     date.getSeconds().toString().padStart(2,"0") + "." +
-                    date.getMilliseconds().toFixed(3).toString().padStart(3, "0");
+                    date.getMilliseconds().toString().padStart(3, "0");
     document.getElementById("debugout").innerHTML += "[Day " + this.day + " Debug " + timestamp + "] " + log + "<br/>";
   }
 
