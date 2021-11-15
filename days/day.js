@@ -19,6 +19,7 @@ export default class Day {
     this.sampleResults = sampleResults;
     this.starResults = starResults;
     this.results = new dr.dayResults(this.day);
+    this.dodebug = false;
   }
 
   run(callback) {
@@ -173,12 +174,14 @@ export default class Day {
   }
 
   writeDebug(log) {
-    let date = new Date();
-    let timestamp = date.getHours() + ":" + 
-                    date.getMinutes().toString().padStart(2, "0") + ":" + 
-                    date.getSeconds().toString().padStart(2,"0") + "." +
-                    date.getMilliseconds().toString().padStart(3, "0");
-    document.getElementById("debugout").innerHTML += "[Day " + this.day + " Debug " + timestamp + "] " + log + "<br/>";
+    if(this.dodebug) {
+      let date = new Date();
+      let timestamp = date.getHours() + ":" + 
+                      date.getMinutes().toString().padStart(2, "0") + ":" + 
+                      date.getSeconds().toString().padStart(2,"0") + "." +
+                      date.getMilliseconds().toString().padStart(3, "0");
+      document.getElementById("debugout").innerHTML += "[Day " + this.day + " Debug " + timestamp + "] " + log + "<br/>";
+    }
   }
 
   github_input_uri() {
