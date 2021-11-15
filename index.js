@@ -16,13 +16,12 @@ import Day15 from "./days/day15.js";
 import Day16 from "./days/day16.js";
 import Day17 from "./days/day17.js";
 import Day18 from "./days/day18.js";
+import { StatusEnum } from "./lib/dayResults.js";
 
 const appDiv = document.getElementById("app");
 appDiv.innerHTML = `<h1>AdventOfCode 2020</h1>`;
 
 let t0 = performance.now();
-
-let dayix = 1;
 
 let days = [
   new Day1(),
@@ -45,14 +44,17 @@ let days = [
   new Day18()
 ];
 
+let dayix = days.length - 1;
+
 function runDays() {
-  if (dayix <= days.length) {
-    dayix++;
-    appendOutput("Running day " + days[dayix-2].day);
-    days[dayix - 2].run(runDays);
+  if (dayix >= 0 && (dayix == days.length - 1 || days[dayix+1].results.status() == StatusEnum.success) ) {
+    dayix--;
+    appendOutput("Running day " + days[dayix + 1].day);
+    days[dayix + 1].run(runDays);
   } else {
+    if(dayix >= 0) appendOutput("result[" + dayix + "]=" + days[dayix].results.status().toString())
     done();
-  }
+  } 
 }
 
 function appendOutput(log) {
